@@ -48,7 +48,7 @@ class LabelledSwitch extends HTMLInputElement {
     function capture(checkbox) {
       const styles = [], SELECTED = 0, DEFAULT = 1
 
-      checkbox.type = 'text' // So that the border style can fallback to that of the text input
+      checkbox.type = 'text' // So that the border style can fall back to that of the text input
       styles.push(getComputed(project(properties, ['background-color', 'color']), checkbox, '::selection'))
       styles.push(getComputed(properties, checkbox))
       styles.push(getComputed(properties, checkbox.parentElement))
@@ -288,13 +288,13 @@ span.container > .middle-pad {
       observer.disconnect()
 
       if(Object.keys(boxSizes).length === Object.keys(this.#$sizingParts).length) {
-        this.#onUpdateDimension(boxSizes)
+        this.#onSizeUpdated(boxSizes)
       }
     }).observe(element)
   }
 
-  #onUpdateDimension(boxSizes) {
-    // console.debug("[DEBUG] Calling [name=%s].#onUpdateDimension(): %o", this.name, boxSizes)
+  #onSizeUpdated(boxSizes) {
+    // console.debug("[DEBUG] Calling [name=%s].#onSizeUpdated(): %o", this.name, boxSizes)
     const netHeight = boxSizes.on.blockSize
     const borderWidth = Number(((s) => s.substring(0, s.length-2))(this.#style['border-width']))
     const offWidth = boxSizes.off.inlineSize
