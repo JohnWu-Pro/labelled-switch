@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Labelled Switch</title>
+  <meta name="author" content="Juhua (John) Wu">
+  <meta name="description" content="A customzied HTML built-in checkbox that supports the labelled two-state toggling.">
+  <meta name="keywords" content="labelled switch, toggle, switch, custom element, shadow dom">
+
+  <script src="labelled-switch.js" data-cacheable type="text/javascript"></script>
+
+  <style>
+    div.case {
+      margin: 3vmin;
+      padding: 3vmin;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="case">
+    <style>
+      input[name="case-default"] {
+        border: 1px solid black;
+        background-color: white;
+        color: rgba(1, 1, 1, 0.32);
+      }
+      input[name="case-default"]::selection {
+        background-color: rgba(1, 1, 1, 0.16);
+        color: rgb(1, 1, 1);
+      }
+    </style>
+    <div>Case 1: Default</div>
+    <input name="case-default" is="labelled-switch">
+  </div>
+
+  <div class="case" style="color: blue;">
+    <style>
+      input[name="case-blue"] {
+        background-color: white;
+        border: 1px solid blue;
+        color: rgba(0, 0, 255, 0.32);
+      }
+      input[name="case-blue"]::selection {
+        background-color: rgba(0, 0, 255, 0.16);
+        color: rgb(0, 0, 255);
+      }
+    </style>
+    <div>Case 2: Blue</div>
+    <input name="case-blue" is="labelled-switch" value="on">
+  </div>
+
+  <div class="case" style="font-size: x-large; color: green;">
+    <style>
+      input[name="case-x-large-green"] {
+        border: 1px solid green;
+        background-color: white;
+        color: rgba(0, 128, 0, 0.32);
+        outline: 1px solid blue;
+      }
+      input[name="case-x-large-green"]::selection {
+        background-color: rgba(0, 128, 0, 0.16);
+        color: rgb(0, 128, 0);
+      }
+    </style>
+    <div>Case 3: X-Large Green</div>
+    <input name="case-x-large-green" is="labelled-switch"
+        on-label="X-Large Green" on-value="v-x-large-green"
+        off-label="X-Large Green Off" off-value="v-x-large-grey"
+        value="v-x-large-grey">
+  </div>
+
+  <div class="case" style="font-size: medium; color: white; background-color: rgba(32, 32, 32, 0.8);">
+    <style>
+      input[name="case-medium-white"] {
+        border: 1px solid white;
+        background-color: rgba(32, 32, 32, 0.8);
+        color: rgba(255, 255, 255, 0.32);
+      }
+      input[name="case-medium-white"]::selection {
+        background-color: rgba(255, 255, 255, .16);
+        color: rgb(255, 255, 255);
+      }
+    </style>
+    <div>Case 4: Medium White</div>
+    <input name="case-medium-white" is="labelled-switch"
+        on-label="Medium White On Label" on-value="v-medium-white-on"
+        off-label="Medium White" off-value="v-medium-white"
+        value="v-medium-white">
+  </div>
+</body>
+
+</html>
