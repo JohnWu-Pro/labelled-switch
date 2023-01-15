@@ -77,3 +77,4 @@ NOTE: To set the initial state, use the built-in `value` attribute. If the `valu
     * `font-weight`
     * `direction`
     * `line-height`
+   NOTE: The element size will purely depends on the font (size, weight, etc.) and the ON and OFF labels.
