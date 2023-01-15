@@ -53,8 +53,8 @@ class LabelledSwitch extends HTMLInputElement {
       styles.push(getComputed(properties, checkbox))
       styles.push(getComputed(properties, checkbox.parentElement))
 
-      console.debug("[DEBUG] input[name=%o] computed-styles:\n=== ::selection: %s\n=== :default: %s\n=== :parent: %s",
-          checkbox.name, JSON.stringify(styles[0]), JSON.stringify(styles[1]), JSON.stringify(styles[2]))
+      // console.debug("[DEBUG] input[name=%o] computed-styles:\n=== ::selection: %s\n=== :default: %s\n=== :parent: %s",
+      //     checkbox.name, JSON.stringify(styles[0]), JSON.stringify(styles[1]), JSON.stringify(styles[2]))
 
       function get(beginIndex, key) {
         let style = ''
@@ -199,7 +199,7 @@ span.container > .middle-pad {
     super()
 
     this.#style = LabelledSwitch.#Style.capture(this)
-    console.debug("[DEBUG] input[name=%o] captured style: %s", this.name, JSON.stringify(this.#style))
+    // console.debug("[DEBUG] input[name=%o] captured style: %s", this.name, JSON.stringify(this.#style))
 
     this.type = 'checkbox'
 
