@@ -190,7 +190,7 @@ span.container > .middle-pad {
   #style
 
   #attached = false
-  #sized = false
+  #initialized = false
 
   offValue
   onValue
@@ -231,7 +231,7 @@ span.container > .middle-pad {
     this.#$button = this.#shadow.querySelector('#button')
     Object.keys(this.#$sizingParts).forEach((id) => this.#$sizingParts[id] = this.#shadow.querySelector('#'+id))
 
-    this.addEventListener('change', this.#onStateChanged)
+    this.addEventListener('change', this.#onCheckedChanged)
 
     const container = this.#shadow.querySelector('.container')
     this.addEventListener('focus', () => container.classList.add('focused'))
@@ -255,11 +255,14 @@ span.container > .middle-pad {
 
   attributeChangedCallback(name, oldValue, newValue) {
     // console.debug("[DEBUG] Calling [name=%s].attributeChangedCallback(%s, %o, %o) ...", this.name, name, oldValue, newValue)
-    this.#onAttributeChanged()
+    this.#onAttributeChanged(name)
   }
 
-  #onAttributeChanged() {
-    if(!this.#attached || this.#sized) return
+  #onAttributeChanged(name) {
+    if(!this.#attached || this.#initialized) {
+      if(this.#initialized && name === 'value') this.#onValueChanged()
+      return
+    }
     // console.debug("[DEBUG] Executing [name=%s].#onAttributeChanged() ...", this.name)
 
     this.offValue = this.getAttribute('off-value') || 'off'
@@ -312,13 +315,19 @@ span.container > .middle-pad {
     this.#shadow.appendChild(LabelledSwitch.#sizingStyle(
       {borderWidth, netHeight, offWidth, onWidth, padWidth, totalHeight, totalWidth}, this.checked
     ))
-    this.#sized = true
+    this.#initialized = true
 
     this.#updateSwitch()
   }
 
-  #onStateChanged() {
+  #onCheckedChanged() {
     this.value = this.checked ? this.onValue : this.offValue
+
+    this.#updateSwitch()
+  }
+
+  #onValueChanged() {
+    this.checked = this.value === this.onValue
 
     this.#updateSwitch()
   }
