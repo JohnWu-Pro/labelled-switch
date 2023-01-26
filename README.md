@@ -1,6 +1,6 @@
 # Labelled Switch
 
-A customzied HTML built-in checkbox that supports the labelled two-state toggling.
+A customized HTML built-in checkbox that supports the labelled two-state toggling.
 
 # Features
 + Have two states: ON or OFF, customized on top of the built-in `<input type="checkbox">`.
