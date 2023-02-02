@@ -9,9 +9,44 @@ class LabelledSwitch extends HTMLInputElement {
     ]
   }
 
+  static useInternalStyleshhet = true
+
+  static #INPUT = 0
+  static #COMPANION = 1
+  static #styles = [
+    {
+      appearance: 'none',
+      background: 'none',
+      position: 'relative',
+      display: 'inline-block',
+      outline: 'none',
+      margin: '0px',
+      border: 'none',
+      cursor: 'pointer',
+      'vertical-align': 'middle',
+    }, {
+      display: 'inline-block',
+      position: 'relative',
+      overflow: 'visible',
+      width: '0px',
+      'vertical-align': 'middle',
+    }
+  ]
   static #template
 
   static register() {
+    if(LabelledSwitch.useInternalStyleshhet) {
+      document.head.appendChild(LabelledSwitch.#styleElement(`
+        /* Using fake ID selectors to increase CSS declaration specificity */
+        input[is="labelled-switch"]:not(#fake-id-1#fake-id-2#fake-id-3).style-captured ${LabelledSwitch.#cssTextOf(
+          LabelledSwitch.#styles[LabelledSwitch.#INPUT]
+        )}
+        span:not(#fake-id-1#fake-id-2#fake-id-3).labelled-switch-companion ${LabelledSwitch.#cssTextOf(
+          LabelledSwitch.#styles[LabelledSwitch.#COMPANION]
+        )}
+      `.replaceAll(/        /g, '')))
+    }
+
     const template = document.body.appendChild(document.createElement('template'))
     template.id = 'labelled-switch-template'
     template.innerHTML = `
@@ -31,6 +66,13 @@ class LabelledSwitch extends HTMLInputElement {
     // console.debug("[DEBUG] LabelledSwitch.#template: %o", LabelledSwitch.#template)
 
     customElements.define('labelled-switch', LabelledSwitch, {extends: 'input'})
+  }
+
+  static #cssTextOf(style) {
+    return JSON.stringify(style, null, '  ')
+        .replaceAll(/\n}/g, ',\n}')
+        .replaceAll(/"/g, '')
+        .replaceAll(/,/g, ';')
   }
 
   static #Style = (() => {
@@ -200,31 +242,25 @@ span.container > .middle-pad {
   constructor() {
     super()
 
+    // this :: the <input is="labelled-switch">
     this.#style = LabelledSwitch.#Style.capture(this)
     // console.debug("[DEBUG] input[name=%o] captured style: %s", this.name, JSON.stringify(this.#style))
 
     this.type = 'checkbox'
-
-    Object.assign(this.style, { // this :: the <input>
-      appearance: 'none',
-      background: 'none',
-      position: 'relative',
-      display: 'inline-block',
-      outline: 'none',
-      margin: '0',
-      border: 'none',
-      cursor: 'pointer',
-      'vertical-align': 'middle',
-    })
+    if(LabelledSwitch.useInternalStyleshhet) {
+      this.classList.add('style-captured')
+    } else {
+      Object.assign(this.style, LabelledSwitch.#styles[LabelledSwitch.#INPUT])
+    }
 
     this.#shadow = this.insertAdjacentElement('beforebegin', document.createElement('span')).attachShadow({mode: 'open'})
-    Object.assign(this.#shadow.host.style, { // this.#shadow.host :: the companion <span>
-      display: 'inline-block',
-      position: 'relative',
-      overflow: 'visible',
-      width: '0',
-      'vertical-align': 'middle',
-    })
+
+    // this.#shadow.host :: the companion <span>
+    if(LabelledSwitch.useInternalStyleshhet) {
+      this.#shadow.host.classList.add('labelled-switch-companion')
+    } else {
+      Object.assign(this.#shadow.host.style, LabelledSwitch.#styles[LabelledSwitch.#COMPANION])
+    }
 
     const fragment = LabelledSwitch.#template.cloneNode(true)
     fragment.prepend(LabelledSwitch.#noneSizeStyle(this.#style))
