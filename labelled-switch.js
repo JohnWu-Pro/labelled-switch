@@ -16,6 +16,7 @@ class LabelledSwitch extends HTMLInputElement {
   static #styles = [
     {
       appearance: 'none',
+      '-webkit-tap-highlight-color': 'transparent',
       background: 'none',
       position: 'relative',
       display: 'inline-block',
