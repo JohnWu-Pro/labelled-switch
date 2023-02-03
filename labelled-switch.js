@@ -80,12 +80,15 @@ class LabelledSwitch extends HTMLInputElement {
     const properties = Object.freeze({
       'background-color': 'rgba(0, 0, 0, 0)',
 
-      'border': '0px none rgb(0, 0, 0)',
+      'border-color': 'rgb(0, 0, 0)',
+      'border-style': 'none',
       'border-width': '0px',
 
       'color': 'rgb(0, 0, 0)',
 
-      'outline': 'rgb(0, 0, 0) none 0px',
+      'outline-color': 'rgb(0, 0, 0)',
+      'outline-style': 'none',
+      'outline-width': '0px',
     })
 
     function capture(checkbox) {
@@ -94,7 +97,6 @@ class LabelledSwitch extends HTMLInputElement {
       checkbox.type = 'text' // So that the border style can fall back to that of the text input
       styles.push(getComputed(project(properties, ['background-color', 'color']), checkbox, '::selection'))
       styles.push(getComputed(properties, checkbox))
-      styles.push(getComputed(properties, checkbox.parentElement))
 
       // console.debug("[DEBUG] input[name=%o] computed-styles:\n=== ::selection: %s\n=== :default: %s\n=== :parent: %s",
       //     checkbox.name, JSON.stringify(styles[0]), JSON.stringify(styles[1]), JSON.stringify(styles[2]))
@@ -109,13 +111,16 @@ class LabelledSwitch extends HTMLInputElement {
       }
 
       return {
-        'default-background-color': get(DEFAULT, 'background-color'),
-        'selected-background-color': get(SELECTED, 'background-color'),
-        'border': styles[DEFAULT]['border'],
+        'border-color': get(DEFAULT, 'border-color'),
+        'border-style': get(DEFAULT, 'border-style'),
         'border-width': get(DEFAULT, 'border-width'),
-        'selected-color': get(SELECTED, 'color'),
+        'default-background-color': get(DEFAULT, 'background-color'),
         'default-color': get(DEFAULT, 'color'),
-        'outline': styles[DEFAULT]['outline'],
+        'selected-background-color': get(SELECTED, 'background-color'),
+        'selected-color': get(SELECTED, 'color'),
+        'outline-color': get(DEFAULT, 'outline-color'),
+        'outline-style': get(DEFAULT, 'outline-style'),
+        'outline-width': get(DEFAULT, 'border-width'),
       }
     }
 
@@ -156,12 +161,12 @@ span {
 }
 .container {
   background-color: ${style['default-background-color']};
-  border: ${style['border']};
+  border: ${style['border-width']} ${style['border-style']} ${style['border-color']};
   outline: none;
   outline-offset: 0;
 }
 .container.focused {
-  outline: ${style['outline']};
+  outline: ${style['outline-color']} ${style['outline-style']} ${style['outline-width']};
 }
 #button-container {
   overflow: visible;

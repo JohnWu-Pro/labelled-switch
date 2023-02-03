@@ -47,19 +47,19 @@ NOTE: To set the initial state, use the built-in `value` attribute. If the `valu
 1. To specify the **selected color** (i.e. the selected option foreground (i.e. font) color):
    ```
    input[is="labelled-switch"]::selection { // or more specific selector
-      color: green; // i.e. rgb(0, 128, 0)
+      color: rgb(0, 0, 1); // effectively the black color
    }
    ```
    When not specified, falls back to the "element default color".
+   **CAVEAT**:
+   * To use the ***black*** color (i.e. `rgb(0, 0, 0)`), set `{color: rgb(0, 0, 1);}`, since any color that would be resolved/computed to `rgb(0, 0, 0)` is considered that the color is ***not specified***.
 1. To specify the **element default color** (i.e. the un-selected option foreground (i.e. font) color):
    ```
    input[is="labelled-switch"] { // or more specific selector
-      color: rgba(0, 128, 0, 0.32)
+      color: rgba(0, 0, 1, 0.32)
    }
    ```
    When not specified, falls back to the inherited foreground (i.e. font) color.<br/>
-   CAVEAT:
-   * To use the ***black*** color (i.e. `rgb(0, 0, 0)`), set `{color: rgb(1, 1, 1);}`, since any color that would be resolved/computed to `rgb(0, 0, 0)` is considered that the color is not specified.
 1. To specify the **element focused outline** (i.e. the outline when it's focused):
    ```
    input[is="labelled-switch"] { // or more specific selector
