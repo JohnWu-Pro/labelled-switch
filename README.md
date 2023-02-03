@@ -40,7 +40,7 @@ NOTE: To set the initial state, use the built-in `value` attribute. If the `valu
 1. To specify the **element border**:
    ```
    input[is="labelled-switch"] { // or more specific selector
-      border: 1px solid lightgrey;
+      border: 1px solid black;
    }
    ```
    When not specified, falls back to the effective border for **text** input at that spot.
