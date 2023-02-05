@@ -78,8 +78,8 @@ NOTE: To set the initial state, use the built-in `value` attribute. If the `valu
     * `direction`
     * `line-height`
 1. NOTE: The element size will purely depend on the font (size, weight, etc.) and the ON and OFF labels.
-1. NOTE: By default, all `<input is="labelled-switch">` and the companion `<span>` will be styled using an internal style sheet. In some rare cases, their styles may be interfered by other style ruleset(s) since they are not encapsulated in the shadown DOM, and resulting in unsatisfactory rendering result. If that's the case, you may switch the LabelledSwitch to use inline style for `<input is="labelled-switch">` and the companion `<span>` as follows:
+1. NOTE: By default, all `<input is="labelled-switch">` and the companion `<span>` will be styled using an internal style sheet. In some cases, their styles may be interfered by other style ruleset(s) since they are not encapsulated in the shadown DOM, or the browser does not strictly compliant with the CSS specificity specification, and resulting in unsatisfactory rendering result. If that's the case, you may switch the LabelledSwitch to use inline style for `<input is="labelled-switch">` and the companion `<span>` as follows:
    ```
      <script src="labelled-switch.js" type="text/javascript"></script>
-     <script>LabelledSwitch.useInternalStyleshhet = false</script><!--  RIGHT AFTER the previous line. -->
+     <script>LabelledSwitch.useInlineStyle = true</script><!--  RIGHT AFTER the previous line. -->
    ```
