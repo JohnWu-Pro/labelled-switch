@@ -50,7 +50,7 @@ class LabelledSwitch extends HTMLInputElement {
 
     const template = document.body.appendChild(document.createElement('template'))
     template.id = 'labelled-switch-template'
-    template.innerHTML = `
+    template.innerHTML = /*html*/`
       <span class="container">
         <span id="button-container">
           <span id="button"></span>
@@ -152,7 +152,7 @@ class LabelledSwitch extends HTMLInputElement {
 
   })()
 
-  static #noneSizeStyle(style) { return LabelledSwitch.#styleElement(`
+  static #noneSizeStyle(style) { return LabelledSwitch.#styleElement(/*css*/`
 span {
   position: relative;
   display: inline-block;
@@ -189,7 +189,7 @@ span {
 }
 `)}
 
-  static #sizingStyle(size, checked) { return LabelledSwitch.#styleElement(`
+  static #sizingStyle(size, checked) { return LabelledSwitch.#styleElement(/*css*/`
 span.container {
   border-radius: ${size.netHeight/2+size.borderWidth}px;
 }
@@ -202,14 +202,14 @@ span#button {
 span#button:not(.checked) {
   width: ${size.offWidth + size.padWidth * 2 - 2}px;
   left: ${size.onWidth + size.padWidth * 1.5 + 1}px;
-}` : /* else, un-checked */ `
+}` : /* else, un-checked */ /*css*/`
   left: ${size.onWidth + size.padWidth * 1.5 + 1}px;
   width: ${size.offWidth + size.padWidth * 2 - 2}px;
 }
 span#button.checked {
   width: ${size.onWidth + size.padWidth * 2 - 2}px;
   left: 1px;
-}`) + `
+}`) + /*css*/`
 span.container > .edge-pad {
   width: ${size.padWidth}px;
 }
