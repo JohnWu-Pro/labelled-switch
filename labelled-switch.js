@@ -1,12 +1,13 @@
 'use strict';
 
 class LabelledSwitch extends HTMLInputElement {
+  static #OBSERVED_ATTRIBUTES = [
+    'on-label', 'on-value',
+    'off-label', 'off-value',
+    'value'
+  ]
   static get observedAttributes() {
-    return [
-      'on-label', 'on-value',
-      'off-label', 'off-value',
-      'value'
-    ]
+    return LabelledSwitch.#OBSERVED_ATTRIBUTES
   }
 
   static useInlineStyle = false
@@ -45,7 +46,8 @@ class LabelledSwitch extends HTMLInputElement {
         :not(#fake-id-1#fake-id-2#fake-id-3) > span.labelled-switch-companion ${LabelledSwitch.#cssTextOf(
           LabelledSwitch.#styles[LabelledSwitch.#COMPANION]
         )}
-      `.replaceAll(/        /g, '')))
+        `.replaceAll(/        /g, '')
+      ))
     }
 
     const template = document.body.appendChild(document.createElement('template'))
@@ -77,7 +79,7 @@ class LabelledSwitch extends HTMLInputElement {
   }
 
   static #Style = (() => {
-    const properties = Object.freeze({
+    const DEFAULT_PROPS = Object.freeze({
       'background-color': 'rgba(0, 0, 0, 0)',
 
       'border-color': 'rgb(0, 0, 0)',
@@ -95,8 +97,8 @@ class LabelledSwitch extends HTMLInputElement {
       const styles = [], SELECTED = 0, DEFAULT = 1
 
       checkbox.type = 'text' // So that the border style can fall back to that of the text input
-      styles.push(getComputed(project(properties, ['background-color', 'color']), checkbox, '::selection'))
-      styles.push(getComputed(properties, checkbox))
+      styles.push(getComputed(project(DEFAULT_PROPS, ['background-color', 'color']), checkbox, '::selection'))
+      styles.push(getComputed(DEFAULT_PROPS, checkbox))
 
       // console.debug("[DEBUG] input[name=%o] computed-styles:\n=== ::selection: %s\n=== :default: %s\n=== :parent: %s",
       //     checkbox.name, JSON.stringify(styles[0]), JSON.stringify(styles[1]), JSON.stringify(styles[2]))
@@ -105,7 +107,7 @@ class LabelledSwitch extends HTMLInputElement {
         let style = ''
         for(let index = beginIndex; index < styles.length; index++) {
           style = styles[index][key]
-          if(style !== properties[key]) return style
+          if(style !== DEFAULT_PROPS[key]) return style
         }
         return style
       }
@@ -152,71 +154,73 @@ class LabelledSwitch extends HTMLInputElement {
 
   })()
 
-  static #noneSizeStyle(style) { return LabelledSwitch.#styleElement(/*css*/`
-span {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-  vertical-align: top;
-}
-.container {
-  background-color: ${style['default-background-color']};
-  border: ${style['border-width']} ${style['border-style']} ${style['border-color']};
-  outline: none;
-  outline-offset: 0;
-}
-.container.focused {
-  outline: ${style['outline-color']} ${style['outline-style']} ${style['outline-width']};
-}
-#button-container {
-  overflow: visible;
-  width: 0;
-}
-#button {
-  background-color: ${style['selected-background-color']};
-  border: none;
-  top: 1px;
-  transition: 
-    left .3s cubic-bezier(.5,.1,.75,1.35),
-    width .3s cubic-bezier(.5,.1,.75,1.35);
-}
-.label {
-  color: ${style['default-color']};
-  transition: color .3s cubic-bezier(.5,.1,.75,1.35);
-}
-.label.selected {
-  color: ${style['selected-color']};
-}
-`)}
+  static #noneSizingStyle(style) { return LabelledSwitch.#styleElement(/*css*/`
+    span {
+      position: relative;
+      display: inline-block;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+    .container {
+      background-color: ${style['default-background-color']};
+      border: ${style['border-width']} ${style['border-style']} ${style['border-color']};
+      outline: none;
+      outline-offset: 0;
+    }
+    .container.focused {
+      outline: ${style['outline-color']} ${style['outline-style']} ${style['outline-width']};
+    }
+    #button-container {
+      overflow: visible;
+      width: 0;
+    }
+    #button {
+      background-color: ${style['selected-background-color']};
+      border: none;
+      top: 1px;
+      transition: 
+        left .3s cubic-bezier(.5,.1,.75,1.35),
+        width .3s cubic-bezier(.5,.1,.75,1.35);
+    }
+    .label {
+      color: ${style['default-color']};
+      transition: color .3s cubic-bezier(.5,.1,.75,1.35);
+    }
+    .label.selected {
+      color: ${style['selected-color']};
+    }
+    `.replaceAll(/    /g, '')
+  )}
 
-  static #sizingStyle(size, checked) { return LabelledSwitch.#styleElement(/*css*/`
-span.container {
-  border-radius: ${size.netHeight/2+size.borderWidth}px;
-}
-span#button {
-  border-radius: ${(size.netHeight-2)/2}px;
-  height: ${size.netHeight-2}px;` + (checked===true ? `
-  left: 1px;
-  width: ${size.onWidth + size.padWidth * 2 - 2}px;
-}
-span#button:not(.checked) {
-  width: ${size.offWidth + size.padWidth * 2 - 2}px;
-  left: ${size.onWidth + size.padWidth * 1.5 + 1}px;
-}` : /* else, un-checked */ /*css*/`
-  left: ${size.onWidth + size.padWidth * 1.5 + 1}px;
-  width: ${size.offWidth + size.padWidth * 2 - 2}px;
-}
-span#button.checked {
-  width: ${size.onWidth + size.padWidth * 2 - 2}px;
-  left: 1px;
-}`) + /*css*/`
-span.container > .edge-pad {
-  width: ${size.padWidth}px;
-}
-span.container > .middle-pad {
-  width: ${size.padWidth * 1.5}px;
-}
-`)}
+  static #sizingStyle(size, checked) { return LabelledSwitch.#styleElement((`
+    span.container {
+      border-radius: ${size.netHeight/2+size.borderWidth}px;
+    }
+    span#button {
+      border-radius: ${(size.netHeight-2)/2}px;
+      height: ${size.netHeight-2}px;` + (checked===true ? /* if checked */`
+      left: 1px;
+      width: ${size.onWidth + size.padWidth * 2 - 2}px;
+    }
+    span#button:not(.checked) {
+      width: ${size.offWidth + size.padWidth * 2 - 2}px;
+      left: ${size.onWidth + size.padWidth * 1.5 + 1}px;
+    }` : /* else, un-checked */`
+      left: ${size.onWidth + size.padWidth * 1.5 + 1}px;
+      width: ${size.offWidth + size.padWidth * 2 - 2}px;
+    }
+    span#button.checked {
+      width: ${size.onWidth + size.padWidth * 2 - 2}px;
+      left: 1px;
+    }`/* end-if */) + `
+    span.container > .edge-pad {
+      width: ${size.padWidth}px;
+    }
+    span.container > .middle-pad {
+      width: ${size.padWidth * 1.5}px;
+    }
+    `).replaceAll(/    /g, '')
+  )}
 
   static #styleElement(content) {
     // console.debug("[DEBUG] Calling #styleElement(%s) ...", content)
@@ -269,7 +273,7 @@ span.container > .middle-pad {
     }
 
     const fragment = LabelledSwitch.#template.cloneNode(true)
-    fragment.prepend(LabelledSwitch.#noneSizeStyle(this.#style))
+    fragment.prepend(LabelledSwitch.#noneSizingStyle(this.#style))
     this.#shadow.appendChild(fragment)
 
     this.#$button = this.#shadow.querySelector('#button')
